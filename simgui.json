@@ -1,0 +1,149 @@
+{
+  "HALProvider": {
+    "Addressable LEDs": {
+      "0": {
+        "columns": 95
+      },
+      "window": {
+        "visible": true
+      }
+    },
+    "Other Devices": {
+      "CANCoder[11]": {
+        "header": {
+          "open": true
+        }
+      }
+    }
+  },
+  "NTProvider": {
+    "types": {
+      "/FMSInfo": "FMSInfo",
+      "/Shuffleboard/Auto/Field": "Field2d",
+      "/Shuffleboard/Auto/Starting Position": "String Chooser",
+      "/Shuffleboard/Back Up Auto/Auto Chooser": "String Chooser",
+      "/Shuffleboard/Backup Auto/Auto Chooser": "String Chooser",
+      "/Shuffleboard/Backup Auto/Field": "Field2d",
+      "/Shuffleboard/Commands/Activate Alliance LED": "Command",
+      "/Shuffleboard/Commands/Activate Purple LED": "Command",
+      "/Shuffleboard/Commands/Activate Yellow LED": "Command",
+      "/Shuffleboard/Commands/Align to april tag!!!!": "Command",
+      "/Shuffleboard/Commands/Celebrate": "Command",
+      "/Shuffleboard/Commands/Close Grabber": "Command",
+      "/Shuffleboard/Commands/Intake Spit": "Command",
+      "/Shuffleboard/Commands/Intake Stop": "Command",
+      "/Shuffleboard/Commands/Intake Suck": "Command",
+      "/Shuffleboard/Commands/OG balance": "Command",
+      "/Shuffleboard/Commands/OLD balance": "Command",
+      "/Shuffleboard/Commands/Open Grabber": "Command",
+      "/Shuffleboard/Commands/Pickup": "Command",
+      "/Shuffleboard/Commands/Retract Stinger": "Command",
+      "/Shuffleboard/Commands/Return Elevator and Stinger": "Command",
+      "/Shuffleboard/Commands/SIDE TO TAPE": "Command",
+      "/Shuffleboard/Commands/Score LOW PEG": "Command",
+      "/Shuffleboard/Commands/Score LOW SHELF": "Command",
+      "/Shuffleboard/Commands/Score Low (General)": "Command",
+      "/Shuffleboard/Commands/Score MID PEG": "Command",
+      "/Shuffleboard/Commands/Score MID SHELF": "Command",
+      "/Shuffleboard/Commands/Score Mid (General)": "Command",
+      "/Shuffleboard/Commands/Set Grabber has Cone": "Command",
+      "/Shuffleboard/Commands/Set Grabber has Cube": "Command",
+      "/Shuffleboard/Commands/Signal Cone": "Command",
+      "/Shuffleboard/Commands/Signal Cube": "Command",
+      "/Shuffleboard/Commands/Stinger Out": "Command",
+      "/Shuffleboard/Commands/TURN TO TAPE": "Command",
+      "/Shuffleboard/Commands/Test Trajectory test.2m Circle": "Command",
+      "/Shuffleboard/Commands/Test Trajectory test.2m Line": "Command",
+      "/Shuffleboard/Commands/Test Trajectory test.2m S Bend": "Command",
+      "/Shuffleboard/Commands/Test Trajectory test.2m Square": "Command",
+      "/Shuffleboard/Commands/Test Trajectory test.Nm Teardrop": "Command",
+      "/Shuffleboard/Commands/Toggle Grabber": "Command",
+      "/Shuffleboard/Commands/Toggle Grabber has Cone": "Command",
+      "/Shuffleboard/Commands/Toggle Stinger": "Command",
+      "/Shuffleboard/Commands/Trajectory test.2m Circle": "Command",
+      "/Shuffleboard/Commands/Trajectory test.2m Line": "Command",
+      "/Shuffleboard/Commands/Trajectory test.2m S Bend": "Command",
+      "/Shuffleboard/Commands/Trajectory test.2m Spinning Line": "Command",
+      "/Shuffleboard/Commands/Trajectory test.2m Square": "Command",
+      "/Shuffleboard/Commands/Trajectory test.Line": "Command",
+      "/Shuffleboard/Commands/balance": "Command",
+      "/Shuffleboard/Commands/deIntake score": "Command",
+      "/Shuffleboard/Commands/humanz": "Command",
+      "/Shuffleboard/Commands/return elevator + stinger": "Command",
+      "/Shuffleboard/Commands/sus": "Command",
+      "/Shuffleboard/Debug/Mechanism": "Mechanism2d",
+      "/Shuffleboard/PID/ELEVATOR-PID/Elevator PID": "PIDController",
+      "/Shuffleboard/PID/THETA-PID/θ-PID Controller": "PIDController",
+      "/Shuffleboard/PID/X-PID/X-PID Controller": "PIDController",
+      "/Shuffleboard/PID/Y-PID/Y-PID Controller": "PIDController",
+      "/Shuffleboard/Test Trajectories/Test Trajectory test.2m Circle": "Command",
+      "/Shuffleboard/Test Trajectories/Test Trajectory test.2m Line": "Command",
+      "/Shuffleboard/Test Trajectories/Test Trajectory test.2m S Bend": "Command",
+      "/Shuffleboard/Test Trajectories/Test Trajectory test.2m Square": "Command",
+      "/Shuffleboard/Test Trajectories/Test Trajectory test.Hershey's Kiss": "Command",
+      "/Shuffleboard/Test Trajectories/Test Trajectory test.Nm Teardrop": "Command",
+      "/Shuffleboard/Test Trajectories/Test Trajectory test.Rapid Fire": "Command",
+      "/Shuffleboard/The Field/Field": "Field2d"
+    },
+    "windows": {
+      "/Shuffleboard/Auto/Field": {
+        "Start": {
+          "arrows": false,
+          "style": "Box/Image"
+        },
+        "window": {
+          "visible": true
+        }
+      }
+    }
+  },
+  "NetworkTables": {
+    "transitory": {
+      "Shuffleboard": {
+        "Debug": {
+          "open": true
+        },
+        "PID": {
+          "ELEVATOR-PID": {
+            "open": true
+          }
+        },
+        "open": true
+      }
+    }
+  },
+  "NetworkTables Info": {
+    "Clients": {
+      "open": true
+    },
+    "Server": {
+      "open": true
+    }
+  },
+  "NetworkTables View": {
+    "visible": false
+  },
+  "Plot": {
+    "Plot <0>": {
+      "plots": [
+        {
+          "height": 553,
+          "series": [
+            {
+              "color": [
+                0.2980392277240753,
+                0.44705885648727417,
+                0.6901960968971252,
+                1.0
+              ],
+              "id": "NT:/Shuffleboard/Debug/Elevator Extension"
+            }
+          ]
+        }
+      ],
+      "window": {
+        "visible": false
+      }
+    }
+  }
+}

@@ -7,7 +7,7 @@ import edu.wpi.first.wpilibj.AddressableLEDBuffer;
  */
 public abstract class AnimationBase extends SimpleAnimationBase
 {
-    private final AddressableLEDBuffer buffer = new AddressableLEDBuffer(LED.LED_COUNT);
+    private final AddressableLEDBuffer buffer = new AddressableLEDBuffer(97); //TODO add constant
 
     @Override
     public AddressableLEDBuffer getBuffer() {return buffer;}

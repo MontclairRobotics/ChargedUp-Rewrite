@@ -22,6 +22,6 @@ public final class Main
      */
     public static void main(String... args) 
     {
-        // CommandRobot.start(ChargedUp::new); //TODO fix this with new file
+        CommandRobot.start(ChargedUp::new);
     }
 }

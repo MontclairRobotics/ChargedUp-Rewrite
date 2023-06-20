@@ -46,15 +46,15 @@ public class Drivetrain extends ManagerSubsystemBase {
     private PIDMechanism yPID;
     private PIDMechanism thetaPID;
 
-    private SwerveModule[] modules = new SwerveModule[DriveConstants.MODULES.length];
+    private final SwerveModule[] modules = new SwerveModule[4];;
 
     public Drivetrain() {
-        poseEstimator = new SwerveDrivePoseEstimator(DriveConstants.KINEMATICS, ChargedUp.gyroscope.getRobotRotationCounterClockwise(), getModulePositions(), new Pose2d());
-        
         //TODO why do they have each module on shuffleboard?
         for (int i = 0; i < DriveConstants.MODULES.length; i++) {
             modules[i] = DriveConstants.MODULES[i].build();
         }
+
+        poseEstimator = new SwerveDrivePoseEstimator(DriveConstants.KINEMATICS, ChargedUp.gyroscope.getRobotRotationCounterClockwise(), getModulePositions(), new Pose2d());
 
         xRateLimiter = new SlewRateLimiter(DriveConstants.getRateLimit());
         yRateLimiter = new SlewRateLimiter(DriveConstants.getRateLimit());
@@ -142,10 +142,12 @@ public class Drivetrain extends ManagerSubsystemBase {
 
         
         if (fieldRelative) {
-            this.chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(chassisSpeeds, ChargedUp.gyroscope.getRobotRotationCounterClockwise());
+            this.chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(new ChassisSpeeds(xLimited, yLimited, thetaLimited), ChargedUp.gyroscope.getRobotRotationCounterClockwise());
+        } else {
+            this.chassisSpeeds = new ChassisSpeeds(xLimited, yLimited, thetaLimited);
         }
 
-        SwerveModuleState[] moduleStates = DriveConstants.KINEMATICS.toSwerveModuleStates(new ChassisSpeeds(xLimited, yLimited, thetaLimited));
+        SwerveModuleState[] moduleStates = DriveConstants.KINEMATICS.toSwerveModuleStates(chassisSpeeds);
 
         for (int i = 0; i < modules.length; i++) {
             modules[i].set(moduleStates[i].speedMetersPerSecond * DriveConstants.MAX_VOLTAGE, moduleStates[i].angle.getRadians());

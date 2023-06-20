@@ -213,7 +213,7 @@ public abstract class GameController
     public static enum Type
     {
         XBOX,
-        PS4,
+        PS4, ControllerConstants,
     }
     
     /**

@@ -9,9 +9,12 @@ import org.team555.util.frc.GameController.Axis;
 import org.team555.util.frc.GameController.Button;
 import org.team555.util.frc.commandrobot.RobotContainer;
 
+import static org.team555.util.frc.GameController.*;
+
 import com.kauailabs.navx.frc.AHRS;
 
-import edu.wpi.first.wpilibj.PS4Controller;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Commands;
 
 public class ChargedUp extends RobotContainer {
@@ -29,10 +32,21 @@ public class ChargedUp extends RobotContainer {
                 JoystickInput drive = JoystickInput.getLeft(driverController, false, true);
                 JoystickInput turn = JoystickInput.getRight(driverController, false, true);
 
+                if (!DriverStation.isTeleop()) 
+                    {
+                        drivetrain.driveFromSpeeds(0, 0, 0);
+                        return;
+                    }
+
                 drivetrain.driveFromInputs(turn, drive);
             },
             drivetrain
         ));
+
+        driverController.getButton(Button.A_CROSS).toggleOnTrue(Commands555.turnToAbsoluteAngle(Rotation2d.fromDegrees(180)));
+        driverController.getButton(Button.Y_TRIANGLE).toggleOnTrue(Commands555.turnToAbsoluteAngle(Rotation2d.fromDegrees(0)));
+        driverController.getButton(Button.X_SQUARE).toggleOnTrue(Commands555.turnToAbsoluteAngle(Rotation2d.fromDegrees(90)));
+        driverController.getButton(Button.B_CIRCLE).toggleOnTrue(Commands555.turnToAbsoluteAngle(Rotation2d.fromDegrees(-90)));
 
     }
 

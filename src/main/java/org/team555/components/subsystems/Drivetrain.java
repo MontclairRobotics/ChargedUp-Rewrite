@@ -42,9 +42,9 @@ public class Drivetrain extends ManagerSubsystemBase {
     private SlewRateLimiter yRateLimiter;
     private SlewRateLimiter thetaRateLimiter;
 
-    private PIDMechanism xPID;
-    private PIDMechanism yPID;
-    private PIDMechanism thetaPID;
+    public PIDMechanism xPID;
+    public PIDMechanism yPID;
+    public PIDMechanism thetaPID;
 
     private final SwerveModule[] modules = new SwerveModule[4];;
 
@@ -78,15 +78,16 @@ public class Drivetrain extends ManagerSubsystemBase {
         xPID = new PIDMechanism(xController);
         yPID = new PIDMechanism(yController);
         thetaPID = new PIDMechanism(thetaController);
+        thetaPID.disableOutputClamping();
 
         
     }
 
     public void driveFromInputs(JoystickInput turn, JoystickInput drive) {
         ControllerConstants.TURN_ADJUSTER.adjustX(turn);
-        ControllerConstants.TURN_ADJUSTER.adjustMagnitude(drive);
+        ControllerConstants.DRIVE_ADJUSTER.adjustMagnitude(drive);
 
-        driveFromSpeeds(drive.getX(), drive.getY(), turn.getX());
+        driveFromSpeeds(drive.getX() * MAX_VELOCITY_METERS_PER_SECOND, drive.getY() * MAX_VELOCITY_METERS_PER_SECOND, turn.getX() * MAX_TURN_SPEED_RAD_PER_S);
     }
 
     public void driveFromSpeeds(double xSpeed, double ySpeed, double thetaSpeed) {
@@ -98,8 +99,9 @@ public class Drivetrain extends ManagerSubsystemBase {
         ySpeed = Math555.clamp1(ySpeed);
         thetaSpeed = Math555.clamp1(thetaSpeed);
 
-        xPID.setSpeed(xSpeed);
-        yPID.setSpeed(ySpeed);
+        //This looks stupid, y axis is forward on gyro
+        xPID.setSpeed(ySpeed);
+        yPID.setSpeed(xSpeed);
         thetaPID.setSpeed(thetaSpeed);
     }
 
@@ -120,6 +122,12 @@ public class Drivetrain extends ManagerSubsystemBase {
         }
         return arr;
     }
+
+    public void setThetaPIDTarget(double angle) {
+        thetaPID.setTarget(angle);
+    }
+
+    
 
     @Override
     public void always() { // TODO why does other repository use periodic? Same thing?

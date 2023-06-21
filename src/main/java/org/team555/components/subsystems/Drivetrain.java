@@ -136,9 +136,9 @@ public class Drivetrain extends ManagerSubsystemBase {
         thetaPID.update();
 
         //TODO account for speeds over max
-        double xLimited = xRateLimiter.calculate(xSpeed);
-        double yLimited = yRateLimiter.calculate(ySpeed);
-        double thetaLimited = thetaRateLimiter.calculate(thetaSpeed);
+        double xLimited = xRateLimiter.calculate(xPID.getSpeed());
+        double yLimited = yRateLimiter.calculate(yPID.getSpeed());
+        double thetaLimited = thetaRateLimiter.calculate(thetaPID.getSpeed());
 
         
         if (fieldRelative) {

@@ -6,8 +6,8 @@ public class GyroConstants {
 
     //OFFSET ANGLES FOR NAVX
 
-    public static final int NORTH_ANGLE = 0;
-    public static final int WEST_ANGLE = -90;
-    public static final int EAST_ANGLE = 90;
-    public static final int SOUTH_ANGLE = 180;
+    public static final int NORTH_ANGLE = 90;
+    public static final int WEST_ANGLE = 0;
+    public static final int EAST_ANGLE = 180;
+    public static final int SOUTH_ANGLE = -90;
 }

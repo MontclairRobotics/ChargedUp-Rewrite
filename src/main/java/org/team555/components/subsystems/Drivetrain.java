@@ -24,6 +24,7 @@ import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 
@@ -46,26 +47,29 @@ public class Drivetrain extends ManagerSubsystemBase {
     public PIDMechanism yPID;
     public PIDMechanism thetaPID;
 
+    private int speedIndex = 0;
+
     private final SwerveModule[] modules = new SwerveModule[4];;
 
     public Drivetrain() {
-        //TODO why do they have each module on shuffleboard?
+        // TODO why do they have each module on shuffleboard?
         for (int i = 0; i < DriveConstants.MODULES.length; i++) {
             modules[i] = DriveConstants.MODULES[i].build();
         }
 
-        poseEstimator = new SwerveDrivePoseEstimator(DriveConstants.KINEMATICS, ChargedUp.gyroscope.getRobotRotationCounterClockwise(), getModulePositions(), new Pose2d());
+        poseEstimator = new SwerveDrivePoseEstimator(DriveConstants.KINEMATICS,
+                ChargedUp.gyroscope.getRobotRotationCounterClockwise(), getModulePositions(), new Pose2d());
 
         xRateLimiter = new SlewRateLimiter(DriveConstants.getRateLimit());
         yRateLimiter = new SlewRateLimiter(DriveConstants.getRateLimit());
         thetaRateLimiter = new SlewRateLimiter(DriveConstants.getRateLimit());
-        
+
         PIDController xController = new PIDController(PosPID.KP.get(), PosPID.KI.get(), PosPID.KD.get());
         PIDController yController = new PIDController(PosPID.KP.get(), PosPID.KI.get(), PosPID.KD.get());
         PIDController thetaController = new PIDController(ThetaPID.KP.get(), ThetaPID.KI.get(), ThetaPID.KD.get());
 
         thetaController.setTolerance(Math.toRadians(1.5), Math.toRadians(0.5));
-        thetaController.enableContinuousInput(0, 2*Math.PI);
+        thetaController.enableContinuousInput(0, 2 * Math.PI);
 
         PosPID.KP.whenUpdate(xController::setP).whenUpdate(yController::setP);
         PosPID.KI.whenUpdate(xController::setI).whenUpdate(yController::setI);
@@ -80,26 +84,38 @@ public class Drivetrain extends ManagerSubsystemBase {
         thetaPID = new PIDMechanism(thetaController);
         thetaPID.disableOutputClamping();
 
-        
     }
 
     public void driveFromInputs(JoystickInput turn, JoystickInput drive) {
         ControllerConstants.TURN_ADJUSTER.adjustX(turn);
         ControllerConstants.DRIVE_ADJUSTER.adjustMagnitude(drive);
 
-        driveFromSpeeds(drive.getX() * MAX_VELOCITY_METERS_PER_SECOND, drive.getY() * MAX_VELOCITY_METERS_PER_SECOND, turn.getX() * MAX_TURN_SPEED_RAD_PER_S);
+        driveFromSpeeds(drive.getX() * MAX_VELOCITY_METERS_PER_SECOND, drive.getY() * MAX_VELOCITY_METERS_PER_SECOND,
+                turn.getX() * MAX_TURN_SPEED_RAD_PER_S);
+    }
+
+    public void increaseMaxSpeed() {
+        if (speedIndex < 3) {
+            speedIndex++;
+        }
+    }
+
+    public void decreaseMaxSpeed() {
+        if (speedIndex > 0) {
+            speedIndex--;
+        }
     }
 
     public void driveFromSpeeds(double xSpeed, double ySpeed, double thetaSpeed) {
-        xSpeed = xSpeed / MAX_VELOCITY_METERS_PER_SECOND;
-        ySpeed = ySpeed / MAX_VELOCITY_METERS_PER_SECOND;
-        thetaSpeed = thetaSpeed / MAX_TURN_SPEED_RAD_PER_S;
+        xSpeed = (xSpeed * DriveConstants.SPEED_PRESETS[speedIndex][0]) / MAX_VELOCITY_METERS_PER_SECOND;
+        ySpeed = (ySpeed * DriveConstants.SPEED_PRESETS[speedIndex][0]) / MAX_VELOCITY_METERS_PER_SECOND;
+        thetaSpeed = (thetaSpeed * DriveConstants.SPEED_PRESETS[speedIndex][1]) / MAX_TURN_SPEED_RAD_PER_S;
 
         xSpeed = Math555.clamp1(xSpeed);
         ySpeed = Math555.clamp1(ySpeed);
         thetaSpeed = Math555.clamp1(thetaSpeed);
 
-        //This looks stupid, y axis is forward on gyro
+        // This looks stupid, y axis is forward on gyro
         xPID.setSpeed(ySpeed);
         yPID.setSpeed(xSpeed);
         thetaPID.setSpeed(thetaSpeed);
@@ -127,8 +143,6 @@ public class Drivetrain extends ManagerSubsystemBase {
         thetaPID.setTarget(angle);
     }
 
-    
-
     @Override
     public void always() { // TODO why does other repository use periodic? Same thing?
 
@@ -138,27 +152,30 @@ public class Drivetrain extends ManagerSubsystemBase {
         yPID.setMeasurement(poseEstimator.getEstimatedPosition().getY());
         thetaPID.setMeasurement(poseEstimator.getEstimatedPosition().getRotation().getRadians() % (2 * Math.PI));
 
-
         xPID.update();
         yPID.update();
         thetaPID.update();
 
-        //TODO account for speeds over max
+        // TODO account for speeds over max
         double xLimited = xRateLimiter.calculate(xPID.getSpeed());
         double yLimited = yRateLimiter.calculate(yPID.getSpeed());
         double thetaLimited = thetaRateLimiter.calculate(thetaPID.getSpeed());
 
-        
         if (fieldRelative) {
-            this.chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(new ChassisSpeeds(xLimited, yLimited, thetaLimited), ChargedUp.gyroscope.getRobotRotationCounterClockwise());
+            this.chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
+                    new ChassisSpeeds(xLimited, yLimited, thetaLimited),
+                    ChargedUp.gyroscope.getRobotRotationCounterClockwise());
         } else {
             this.chassisSpeeds = new ChassisSpeeds(xLimited, yLimited, thetaLimited);
         }
 
         SwerveModuleState[] moduleStates = DriveConstants.KINEMATICS.toSwerveModuleStates(chassisSpeeds);
 
+        SwerveDriveKinematics.desaturateWheelSpeeds(moduleStates, DriveConstants.MAX_VELOCITY_METERS_PER_SECOND);
+
         for (int i = 0; i < modules.length; i++) {
-            modules[i].set(moduleStates[i].speedMetersPerSecond * DriveConstants.MAX_VOLTAGE, moduleStates[i].angle.getRadians());
+            modules[i].set(moduleStates[i].speedMetersPerSecond * DriveConstants.MAX_VOLTAGE,
+                    moduleStates[i].angle.getRadians());
         }
     }
 

@@ -115,8 +115,8 @@ public class Drivetrain extends ManagerSubsystemBase {
         ySpeed = Math555.clamp1(ySpeed);
         thetaSpeed = Math555.clamp1(thetaSpeed);
 
-        // This looks stupid, y axis is forward on gyro
-        xPID.setSpeed(ySpeed);
+        //This looks stupid, y axis is forward on gyro
+        xPID.setSpeed(-ySpeed);
         yPID.setSpeed(xSpeed);
         thetaPID.setSpeed(thetaSpeed);
     }

@@ -114,13 +114,17 @@ public class DriveConstants {
                     KD.get());
         }
     }
-
-    public static class ThetaPID {
-        public static final Tunable<Double> KP = Tunable.of(0.54, "drive.theta.kp");
-        public static final Tunable<Double> KI = Tunable.of(0.02, "drive.theta.ki");
-        public static final Tunable<Double> KD = Tunable.of(0.08, "drive.theta.kd");
-
-        public static PIDConstants consts() {
+    public static class ThetaPID
+    {
+        // public static final Tunable<Double> KP = Tunable.of(0.54, "drive.theta.kp");
+        // public static final Tunable<Double> KI = Tunable.of(0.02, "drive.theta.ki");
+        // public static final Tunable<Double> KD = Tunable.of(0.08, "drive.theta.kd");
+        public static final Tunable<Double> KP = Tunable.of(0.1, "drive.theta.kp");
+        public static final Tunable<Double> KI = Tunable.of(0.0, "drive.theta.ki");
+        public static final Tunable<Double> KD = Tunable.of(0.0, "drive.theta.kd");
+        
+        public static PIDConstants consts()
+        {
             return new PIDConstants(
                     KP.get(),
                     KI.get(),

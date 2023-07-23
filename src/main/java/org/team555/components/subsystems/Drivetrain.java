@@ -93,14 +93,14 @@ public class Drivetrain extends ManagerSubsystemBase {
         driveFromSpeeds(drive.getX() * MAX_VELOCITY_METERS_PER_SECOND, drive.getY() * MAX_VELOCITY_METERS_PER_SECOND,
                 turn.getX() * MAX_TURN_SPEED_RAD_PER_S);
     }
-
-    public void increaseMaxSpeed() {
+    //TODO ignore speed limits while using PID
+    public void decreaseMaxSpeed() {
         if (speedIndex < 3) {
             speedIndex++;
         }
     }
 
-    public void decreaseMaxSpeed() {
+    public void increaseMaxSpeed() {
         if (speedIndex > 0) {
             speedIndex--;
         }
@@ -144,12 +144,15 @@ public class Drivetrain extends ManagerSubsystemBase {
     }
 
     @Override
-    public void always() { // TODO why does other repository use periodic? Same thing?
+    public void always() { // TODO why does other repository use periodic? Same thing? - periodic in subsystems only runs while a command is scheduled for it 
 
+
+        //TODO why do they do this after they drive, not before??? - Turns out it should be!
         poseEstimator.update(ChargedUp.gyroscope.getRobotRotationCounterClockwise(), getModulePositions());
 
         xPID.setMeasurement(poseEstimator.getEstimatedPosition().getX());
         yPID.setMeasurement(poseEstimator.getEstimatedPosition().getY());
+        //TODO just use gyroscope measurements directly?
         thetaPID.setMeasurement(poseEstimator.getEstimatedPosition().getRotation().getRadians() % (2 * Math.PI));
 
         xPID.update();
